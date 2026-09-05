@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Chinese Tutor</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .tutor {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        #avatar {
+            font-size: 80px;
+        }
+
+        #conversation {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .message {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 12px;
+        }
+
+        .ai {
+            background: #eeeeee;
+        }
+
+        .user {
+            background: #dff5ff;
+        }
+
+        #mic {
+            font-size: 20px;
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🇨🇳 My Chinese Tutor</h1>
+
+    <div class="tutor">
+
+        <div id="avatar">👩‍🏫</div>
+
+        <h2>🍜 Chinese Restaurant</h2>
+
+        <p>1-to-1 Roleplay</p>
+
+        <div id="conversation">
+
+            <div class="message ai">
+                🤖 <b>服务员:</b><br>
+                你好！欢迎光临。请问几位？
+                <br><br>
+                <small>Nǐ hǎo! Welcome. How many people?</small>
+            </div>
+
+        </div>
+
+        <button id="mic" onclick="startListening()">
+            🎤 Talk
+        </button>
+
+    </div>
+
+    <script>
+
+        function startListening() {
+
+            const SpeechRecognition =
+                window.SpeechRecognition ||
+                window.webkitSpeechRecognition;
+
+            if (!SpeechRecognition) {
+                alert("Speech recognition is not supported.");
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+
+            recognition.lang = "zh-CN";
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.start();
+
+            document.getElementById("mic").innerText =
+                "🎙️ Listening...";
+
+            recognition.onresult = function(event) {
+
+                const text =
+                    event.results[0][0].transcript;
+
+                document.getElementById("conversation").innerHTML += `
+                    <div class="message user">
+                        👤 <b>You:</b><br>
+                        ${text}
+                    </div>
+                `;
+
+                document.getElementById("mic").innerText =
+                    "🎤 Talk";
+            };
+
+            recognition.onerror = function(event) {
+
+                document.getElementById("mic").innerText =
+                    "🎤 Talk";
+
+                alert("Microphone error: " + event.error);
+            };
+        }
+
+    </script>
+
+</body>
+</html>
